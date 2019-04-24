@@ -1,4 +1,6 @@
-<?php namespace Vendor\Package;
+<?php
+
+namespace PrimitiveSocial\NestioApiWrapper;
 
 use Illuminate\Support\ServiceProvider as LaravelServiceProvider;
 
@@ -19,10 +21,20 @@ class ServiceProvider extends LaravelServiceProvider {
     public function boot() {
 
         $this->handleConfigs();
-        // $this->handleMigrations();
-        // $this->handleViews();
-        // $this->handleTranslations();
-        // $this->handleRoutes();
+
+        if ($this->app->runningInConsole()) {
+            $this->bootForConsole();
+        }
+
+    }
+
+    protected function bootForConsole()
+    {
+
+        // Publishing the configuration file.
+        $this->publishes([
+            __DIR__.'/../config/nestio.php' => config_path('nestio.php'),
+        ], 'nestio.config');
     }
 
     /**
@@ -33,6 +45,12 @@ class ServiceProvider extends LaravelServiceProvider {
     public function register() {
 
         // Bind any implementations.
+        $this->mergeConfigFrom(__DIR__.'/../config/nestio.php', 'nestio');
+
+        // Register the service the package provides.
+        $this->app->singleton('nestioapiwrapper', function ($app) {
+            return new Nestio;
+        });
 
     }
 
@@ -43,37 +61,16 @@ class ServiceProvider extends LaravelServiceProvider {
      */
     public function provides() {
 
-        return [];
+        return ['nestioapiwrapper'];
     }
 
     private function handleConfigs() {
 
-        $configPath = __DIR__ . '/../config/packagename.php';
+        $configPath = __DIR__ . '/../config/nestio.php';
 
-        $this->publishes([$configPath => config_path('packagename.php')]);
+        $this->publishes([$configPath => config_path('nestio.php')]);
 
-        $this->mergeConfigFrom($configPath, 'packagename');
+        $this->mergeConfigFrom($configPath, 'nestio');
     }
 
-    private function handleTranslations() {
-
-        $this->loadTranslationsFrom(__DIR__.'/../lang', 'packagename');
-    }
-
-    private function handleViews() {
-
-        $this->loadViewsFrom(__DIR__.'/../views', 'packagename');
-
-        $this->publishes([__DIR__.'/../views' => base_path('resources/views/vendor/packagename')]);
-    }
-
-    private function handleMigrations() {
-
-        $this->publishes([__DIR__ . '/../migrations' => base_path('database/migrations')]);
-    }
-
-    private function handleRoutes() {
-
-        include __DIR__.'/../routes.php';
-    }
 }
