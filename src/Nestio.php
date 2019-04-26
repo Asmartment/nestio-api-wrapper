@@ -29,7 +29,7 @@ class Nestio {
 
 	protected $method;
 
-	protected $sendData;
+	protected $sendData = [];
 
 	public $output;
 
@@ -39,9 +39,9 @@ class Nestio {
 
 	public function construct($apiKey, $version = 2) {
 
-		$apiKey = $apiKey ?: config('nestio.api_key');
+		$this->apiKey = $apiKey ?: config('nestio.api_key');
 
-		if(!$apiKey) throw NestioException::noApiKey();
+		if(!$this->apiKey) throw NestioException::noApiKey();
 
 		$this->url = 'https://nestiolistings.com/';
 
@@ -64,7 +64,8 @@ class Nestio {
 			'headers' => array(
 				'Content-Type' 		=> 'application/json',
 				'Accept'       		=> 'application/json',
-				'user'				=> $apiKey,
+				// @TODO: Is this line needed?
+				'user'				=> $this->apiKey,
 			)
 		));
 
@@ -133,6 +134,13 @@ class Nestio {
 		}
 
 		protected function send() {
+
+			$sendData = array_merge(
+				array(
+					'key' => $this->apiKey
+				),
+				$this->sendData
+			);
 
 			try {
 

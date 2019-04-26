@@ -1,27 +1,14 @@
-# Boilerplate Laravel 5 Package
+# Nestio API Package
 
 ## Installation
 
-Clone this repo with minimal history:
+`composer require primitivesocial/nestio-api-wrapper`
 
-```sh
-git clone --depth 1 git@github.com:cviebrock/laravel5-package-template.git
-```
-
-Rename the directory and re-init it as your own package:
-
-```sh
-mv laravel5-package-template my-package
-cd my-package
-rm -rf .git
-git init
-```
-
+`php artisan vendor:publish --`
 
 ## Configuration
 
-The boilerplate files provide a scaffold for building your own package.  You'll need to make a bunch of changes to the files we've provided to make it your own.
-
+Add `NESTIO_API_KEY=` to your .env
 
 ### composer.json
 
