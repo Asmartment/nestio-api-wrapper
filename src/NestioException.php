@@ -6,9 +6,9 @@ use Nestio;
 
 class NestioException extends \Exception {
 
-	public static function noApiUrl() {
+	public static function noApiKey() {
 
-		return new self("An API URL is required.");
+		return new self("An API Key is required.");
 
 	}
 
