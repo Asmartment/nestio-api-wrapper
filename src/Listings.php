@@ -14,6 +14,7 @@ use PrimitiveSocial\NestioApiWrapper\Enums\Parking;
 use PrimitiveSocial\NestioApiWrapper\Enums\Pets;
 use PrimitiveSocial\NestioApiWrapper\Enums\PropertyType;
 use PrimitiveSocial\NestioApiWrapper\Enums\Source;
+use PrimitiveSocial\NestioApiWrapper\Enums\SortBy;
 
 class Listings extends Nestio {
 
@@ -22,6 +23,67 @@ class Listings extends Nestio {
 	// GET /api/v2/listings/residential/sales/
 	// GET /api/v2/listings/commercial/rentals/
 	// GET /api/v2/listings/commercial/sales/
+
+	// Getters
+	public function all() {
+
+		$this->callMethod = 'GET';
+
+		$this->uri = 'listings/all';
+
+		$this->send();
+
+		return $this->output();
+
+	}
+
+	public function residentialRentals() {
+
+		$this->callMethod = 'GET';
+
+		$this->uri = 'listings/residential/rentals';
+
+		$this->send();
+
+		return $this->output();
+
+	}
+
+	public function residentialSales() {
+
+		$this->callMethod = 'GET';
+
+		$this->uri = 'listings/residential/sales';
+
+		$this->send();
+
+		return $this->output();
+
+	}
+
+	public function commercialRentals() {
+
+		$this->callMethod = 'GET';
+
+		$this->uri = 'listings/commercial/rentals';
+
+		$this->send();
+
+		return $this->output();
+
+	}
+
+	public function commercialSales() {
+
+		$this->callMethod = 'GET';
+
+		$this->uri = 'listings/commercial/sales';
+
+		$this->send();
+
+		return $this->output();
+
+	}
 
 	// Setters
 	public function agents($data) {
@@ -96,13 +158,27 @@ class Listings extends Nestio {
 
 	public function commercialUse($data) {
 
+		if(!is_array($this->sendData['commercial_use'])) $this->sendData['commercial_use'] = array();
+
 		$vars = CommercialUse::getConstants();
 
 		foreach ($vars as $key => $value) {
 
-			if($data == $value) {
+			if(is_array($data)) {
 
-				$this->sendData['commercial_use'] = CommercialUse::$key;
+				if(in_array($value, $data)) {
+
+					$this->sendData['commercial_use'][] = CommercialUse::$key;
+
+				}
+
+			} else {
+
+				if($data == $value) {
+
+					$this->sendData['commercial_use'][] = CommercialUse::$key;
+
+				}
 
 			}
 
@@ -113,9 +189,18 @@ class Listings extends Nestio {
 	}
 
 	public function building($data) {
-		// @TODO: How does Nestio read this building data? Array or string? Delimiter?
 
-		$this->sendData['building'] = $data;
+		if(!is_array($this->sendData['building'])) $this->sendData['building'] = array();
+
+		if(is_array($data)) {
+
+			$this->sendData['building'] = array_merge($this->sendData['building'], $data);
+
+		} else {
+
+			$this->sendData['building'][] = $data;
+
+		}
 
 		return $this;
 
@@ -131,13 +216,23 @@ class Listings extends Nestio {
 
 	public function buildingOwnership($data) {
 
+		if(!is_array($this->sendData['building_ownership'])) $this->sendData['building_ownership'] = array();
+
 		$vars = BuildingOwnership::getConstants();
 
 		foreach ($vars as $key => $value) {
 
-			if($data == $value) {
+			if(is_array($data)) {
 
-				$this->sendData['building_ownership'] = BuildingOwnership::$key;
+				if(in_array($value, $data)) {
+
+					$this->sendData['commercial_use'][] = CommercialUse::$key;
+
+				}
+
+			} elseif($data == $value) {
+
+				$this->sendData['commercial_use'][] = CommercialUse::$key;
 
 			}
 
@@ -148,15 +243,24 @@ class Listings extends Nestio {
 	}
 
 	public function company($data) {
-		// @TODO: How does Nestio read this company data? Array or string? Delimiter?
 
-		$this->sendData['company'] = $data;
+		if(!is_array($this->sendData['company'])) $this->sendData['company'] = array();
+
+		if(is_array($data)) {
+
+			$this->sendData['company'] = array_merge($this->sendData['company'], $data);
+
+		} else {
+
+			$this->sendData['company'][] = $data;
+
+		}
 
 		return $this;
 
 	}
 
-	public function exclusive($data = false) {
+	public function exclusive($data = true) {
 
 		$this->sendData['exclusive'] = $data;
 
@@ -180,7 +284,7 @@ class Listings extends Nestio {
 
 	}
 
-	public function elevator($data = false) {
+	public function elevator($data = true) {
 
 		$this->sendData['elevator'] = $data;
 
@@ -208,13 +312,23 @@ class Listings extends Nestio {
 
 	public function pets($data) {
 
+		if(!is_array($this->sendData['pets'])) $this->sendData['pets'] = array();
+
 		$vars = Pets::getConstants();
 
 		foreach ($vars as $key => $value) {
 
-			if($data == $value) {
+			if(is_array($data)) {
 
-				$this->sendData['pets'] = Pets::$key;
+				if(in_array($value, $data)) {
+
+					$this->sendData['pets'][] = Pets::$key;
+
+				}
+
+			} elseif($data == $value) {
+
+				$this->sendData['pets'][] = Pets::$key;
 
 			}
 
@@ -226,13 +340,23 @@ class Listings extends Nestio {
 
 	public function layout($data) {
 
+		if(!is_array($this->sendData['layout'])) $this->sendData['layout'] = array();
+
 		$vars = Layout::getConstants();
 
 		foreach ($vars as $key => $value) {
 
-			if($data == $value) {
+			if(is_array($data)) {
 
-				$this->sendData['layout'] = Layout::$key;
+				if(in_array($value, $data)) {
+
+					$this->sendData['layout'][] = Layout::$key;
+
+				}
+
+			} elseif($data == $value) {
+
+				$this->sendData['layout'][] = Layout::$key;
 
 			}
 
@@ -262,8 +386,264 @@ class Listings extends Nestio {
 
 	public function neighborhoods($data) {
 
-		// @TODO: How does Nestio read this neighborhoods data? Array or string? Delimiter?
-		$this->sendData['neighborhoods'] = $data;
+		if(!is_array($this->sendData['neighborhoods'])) $this->sendData['neighborhoods'] = array();
+
+		if(is_array($data)) {
+
+			$this->sendData['neighborhoods'] = array_merge($this->sendData['neighborhoods'], $data);
+
+		} else {
+
+			$this->sendData['neighborhoods'][] = $data;
+
+		}
+
+		return $this;
+
+	}
+
+	public function postalCode($data) {
+
+		$this->sendData['postal_code'] = $data;
+
+		return $this;
+
+	}
+
+	public function dateAvailableBefore($date) {
+
+		$this->sendData['date_available_before'] = $data;
+
+		return $this;
+
+	}
+
+	public function dateAvailableAfter($date) {
+
+		$this->sendData['date_available_after'] = $data;
+
+		return $this;
+
+	}
+
+	public function hasPhotos ($data = true) {
+
+		$this->sendData['has_photos'] = $data;
+
+	}
+
+	public function incentives($data) {
+
+		$vars = Incentives::getConstants();
+
+		foreach ($vars as $key => $value) {
+
+			if($data == $value) {
+
+				$this->sendData['incentives'] = Incentives::$key;
+
+			}
+
+		}
+
+		return $this;
+
+	}
+
+	public function openHouseBegin($date) {
+
+		$this->sendData['open_house_begin'] = $date;
+
+		return $this;
+
+	}
+
+	public function openHouseEnd($date) {
+
+		$this->sendData['open_house_end'] = $date;
+
+		return $this;
+
+	}
+
+	public function featured($data = true) {
+
+		$this->sendData['featured'] = $data;
+
+	}
+
+	public function source($data) {
+
+		$vars = Source::getConstants();
+
+		foreach ($vars as $key => $value) {
+
+			if($data == $value) {
+
+				$this->sendData['source'] = Source::$key;
+
+			}
+
+		}
+
+		return $this;
+
+	}
+
+	public function city($data) {
+
+		$this->sendData['city'] = strtolower($data);
+
+		return $this;
+
+	}
+
+	public function isRenovated($data = true) {
+
+		$this->sendData['is_renovated'] = strtolower($data);
+
+		return $this;
+
+	}
+
+	public function dishwasher($data = true) {
+
+		$this->sendData['dishwasher'] = $data;
+
+		return $this;
+
+	}
+
+	public function microwave($data = true) {
+
+		$this->sendData['microwave'] = $data;
+
+		return $this;
+
+	}
+
+	public function exposedBrick($data = true) {
+
+		$this->sendData['exposed_brick'] = $data;
+
+		return $this;
+
+	}
+
+	public function hardwoodFloors($data = true) {
+
+		$this->sendData['hardwood_floors'] = $data;
+
+		return $this;
+
+	}
+
+	public function virtualDoorman($data = true) {
+
+		$this->sendData['virtual_doorman'] = $data;
+
+		return $this;
+
+	}
+
+	public function storage($data = true) {
+
+		$this->sendData['storage'] = $data;
+
+		return $this;
+
+	}
+
+	public function shortTerm($data = true) {
+
+		$this->sendData['short_term'] = $data;
+
+		return $this;
+
+	}
+
+	public function liveInSuper($data = true) {
+
+		$this->sendData['live_in_super'] = $data;
+
+		return $this;
+
+	}
+
+	public function lastListedAtBefore($date) {
+
+		$this->sendData['last_listed_at_before'] = $date;
+
+		return $this;
+
+	}
+
+	public function lastListedAtAfter($date) {
+
+		$this->sendData['last_listed_at_after'] = $date;
+
+		return $this;
+
+	}
+
+	public function parking($data) {
+
+		if(is_array($this->sendData['parking'])) $this->sendData['parking'] = array();
+
+		$vars = Parking::getConstants();
+
+		foreach ($vars as $key => $value) {
+
+			if(is_array($data)) {
+
+				if(in_array($value, $data)) {
+
+					$this->sendData['parking'][] = Parking::$key;
+
+				}
+
+			} elseif($data == $value) {
+
+				$this->sendData['parking'][] = Parking::$key;
+
+			}
+
+		}
+
+		return $this;
+
+	}
+
+	public function includePrivate($date) {
+
+		$this->sendData['include_private'] = $date;
+
+		return $this;
+
+	}
+
+	public function sort($data, $dir = 'asc') {
+
+		$vars = SortBy::getConstants();
+
+		foreach ($vars as $key => $value) {
+
+			if($data == $value) {
+
+				$this->sendData['sort'] = SortBy::$key;
+				$this->sendData['sort_dir'] = $dir;
+
+			}
+
+		}
+
+		return $this;
+
+	}
+
+	public function displayAgent($data) {
+
+		$this->sendData['display_agent'] = $data;
 
 		return $this;
 
