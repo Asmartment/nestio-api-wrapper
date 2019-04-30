@@ -6,6 +6,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use Carbon\Carbon;
+use PrimitiveSocial\NestioApiWrapper\NestioException;
 
 class Nestio {
 
@@ -29,7 +30,7 @@ class Nestio {
 
 	protected $method;
 
-	protected $sendData = [];
+	public $sendData = [];
 
 	public $output;
 
@@ -37,7 +38,7 @@ class Nestio {
 
 	protected $error = '';
 
-	public function construct($apiKey, $version = 2) {
+	public function __construct($apiKey = null, $version = 2) {
 
 		$this->apiKey = $apiKey ?: config('nestio.api_key');
 
@@ -104,71 +105,76 @@ class Nestio {
 
 	public function getBody() {
 
-			$result = array();
+		$result = array();
 
-			foreach ($this->container as $transaction) {
+		foreach ($this->container as $transaction) {
 
-				$item = array();
+			$item = array();
 
-				$item['method'] = $transaction['request']->getMethod();
-			    
-			    if ($transaction['response']) {
-			        //> 200, 200
-			        $item['status'] = 'success';
+			$item['method'] = $transaction['request']->getMethod();
+		    
+		    if ($transaction['response']) {
+		        //> 200, 200
+		        $item['status'] = 'success';
 
-			        $item['code'] = $transaction['response']->getStatusCode();
-			        
-			    } elseif ($transaction['error']) {
+		        $item['code'] = $transaction['response']->getStatusCode();
+		        
+		    } elseif ($transaction['error']) {
 
-			        $item['status'] = 'error';
+		        $item['status'] = 'error';
 
-			    }
-			    
-			    $item['data'] = $transaction['options'];
-			    
-			    $result[] = $item;
-			}
-			
-			return json_encode($result);
-
+		    }
+		    
+		    $item['data'] = $transaction['options'];
+		    
+		    $result[] = $item;
 		}
+		
+		return json_encode($result);
 
-		protected function send() {
+	}
 
-			$sendData = array_merge(
+	protected function send() {
+
+		$sendData = array_merge(
+			array(
+				'key' => $this->apiKey
+			),
+			$this->sendData
+		);
+
+		try {
+
+			$response = $this->client->request(
+				$this->callMethod,
+				$this->uri,
 				array(
-					'key' => $this->apiKey
-				),
-				$this->sendData
+					'query' => $sendData,
+					'auth' => array(
+						$this->apiKey,
+						null
+					)
+				)
 			);
 
-			try {
+		} catch (GuzzleHttp\Exception\ClientException $e) {
 
-				$response = $this->client->request(
-					$this->callMethod,
-					$this->uri,
-					array(
-						'json' => $this->sendData
-					)
-				);
+			throw NestioException::guzzleError($e->getMessage(), $this->getBody(), $this->sendData, $this->url . $this->primaryUri . $this->uri);
 
-				$this->output = json_decode($response->getBody(), TRUE);
-				return $this;
+		} catch (\Exception $e) {
 
-			} catch (GuzzleHttp\Exception\ClientException $e) {
+			throw NestioException::guzzleError($e->getMessage(), $this->getBody(), $this->sendData, $this->url . $this->primaryUri . $this->uri);
 
-				throw NestioException::guzzleError($e->getMessage(), $this->getBody(), $this->sendData, $this->url . $this->primaryUri . $this->uri);
+		} catch (\ErrorException $e) {
 
-			} catch (\Exception $e) {
-
-				throw NestioException::guzzleError($e->getMessage(), $this->getBody(), $this->sendData, $this->url . $this->primaryUri . $this->uri);
-
-			} catch (\ErrorException $e) {
-
-				throw NestioException::guzzleError($e->getMessage(), $this->getBody(), $this->sendData, $this->url . $this->primaryUri . $this->uri);
-
-			}
+			throw NestioException::guzzleError($e->getMessage(), $this->getBody(), $this->sendData, $this->url . $this->primaryUri . $this->uri);
 
 		}
+
+		$this->output = json_decode($response->getBody(), TRUE);
+
+		return $this;
+
+	}
 
 }

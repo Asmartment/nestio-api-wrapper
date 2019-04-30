@@ -10,7 +10,8 @@
   "authors": [
     {
       "name": "Primitive Social",
-      "email": "hello@primitivesocial.com"
+      "email": "hello@primitivesocial.com",
+      "homepage": "https://primitivesocial.com"
     }
   ],
   "require": {

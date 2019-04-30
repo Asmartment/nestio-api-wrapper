@@ -2,7 +2,7 @@
 
 namespace PrimitiveSocial\NestioApiWrapper;
 
-use Nestio;
+use PrimitiveSocial\NestioApiWrapper\Nestio;
 use PrimitiveSocial\NestioApiWrapper\Enums\Bathrooms;
 use PrimitiveSocial\NestioApiWrapper\Enums\BuildingOwnership;
 use PrimitiveSocial\NestioApiWrapper\Enums\CommercialUse;
@@ -18,11 +18,11 @@ use PrimitiveSocial\NestioApiWrapper\Enums\SortBy;
 
 class Listings extends Nestio {
 
-	// GET /api/v2/listings/all
-	// GET /api/v2/listings/residential/rentals/
-	// GET /api/v2/listings/residential/sales/
-	// GET /api/v2/listings/commercial/rentals/
-	// GET /api/v2/listings/commercial/sales/
+	public function __construct($apiKey = null, $version = 2) {
+
+		parent::__construct($apiKey, $version);
+
+	}
 
 	// Getters
 	public function all() {
@@ -30,6 +30,20 @@ class Listings extends Nestio {
 		$this->callMethod = 'GET';
 
 		$this->uri = 'listings/all';
+
+		$this->send();
+
+		return $this->output();
+
+	}
+
+	public function byId($id = null) {
+
+		if(!$id) throw NestioException::missingListingId();
+
+		$this->callMethod = 'GET';
+
+		$this->uri = 'listings/' . $id;
 
 		$this->send();
 
@@ -158,7 +172,7 @@ class Listings extends Nestio {
 
 	public function commercialUse($data) {
 
-		if(!is_array($this->sendData['commercial_use'])) $this->sendData['commercial_use'] = array();
+		if(!isset($this->sendData['commercial_use']) || !is_array($this->sendData['commercial_use'])) $this->sendData['commercial_use'] = array();
 
 		$vars = CommercialUse::getConstants();
 
@@ -190,7 +204,7 @@ class Listings extends Nestio {
 
 	public function building($data) {
 
-		if(!is_array($this->sendData['building'])) $this->sendData['building'] = array();
+		if(!isset($this->sendData['building']) || !is_array($this->sendData['building'])) $this->sendData['building'] = array();
 
 		if(is_array($data)) {
 
@@ -216,7 +230,7 @@ class Listings extends Nestio {
 
 	public function buildingOwnership($data) {
 
-		if(!is_array($this->sendData['building_ownership'])) $this->sendData['building_ownership'] = array();
+		if(!isset($this->sendData['building_ownership']) || !is_array($this->sendData['building_ownership'])) $this->sendData['building_ownership'] = array();
 
 		$vars = BuildingOwnership::getConstants();
 
@@ -244,7 +258,7 @@ class Listings extends Nestio {
 
 	public function company($data) {
 
-		if(!is_array($this->sendData['company'])) $this->sendData['company'] = array();
+		if(!isset($this->sendData['company']) || !is_array($this->sendData['company'])) $this->sendData['company'] = array();
 
 		if(is_array($data)) {
 
@@ -312,7 +326,7 @@ class Listings extends Nestio {
 
 	public function pets($data) {
 
-		if(!is_array($this->sendData['pets'])) $this->sendData['pets'] = array();
+		if(!isset($this->sendData['pets']) || !is_array($this->sendData['pets'])) $this->sendData['pets'] = array();
 
 		$vars = Pets::getConstants();
 
@@ -340,7 +354,7 @@ class Listings extends Nestio {
 
 	public function layout($data) {
 
-		if(!is_array($this->sendData['layout'])) $this->sendData['layout'] = array();
+		if(!isset($this->sendData['layout']) || !is_array($this->sendData['layout'])) $this->sendData['layout'] = array();
 
 		$vars = Layout::getConstants();
 
@@ -386,7 +400,7 @@ class Listings extends Nestio {
 
 	public function neighborhoods($data) {
 
-		if(!is_array($this->sendData['neighborhoods'])) $this->sendData['neighborhoods'] = array();
+		if(!isset($this->sendData['neighborhoods']) || !is_array($this->sendData['neighborhoods'])) $this->sendData['neighborhoods'] = array();
 
 		if(is_array($data)) {
 

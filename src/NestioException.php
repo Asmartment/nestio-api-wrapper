@@ -12,6 +12,12 @@ class NestioException extends \Exception {
 
 	}
 
+	public function missingListingId() {
+
+		return new self('Missing listing ID');
+
+	}
+
 	public static function guzzleError($error, $request, $body, $url) {
 
 		return new self(

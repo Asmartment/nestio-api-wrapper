@@ -6,7 +6,7 @@ abstract class Enum {
 
 	public static function getConstants() {
 
-		$oClass = new ReflectionClass(__CLASS__);
+		$oClass = new \ReflectionClass(__CLASS__);
 
 		return $oClass->getConstants();
 
