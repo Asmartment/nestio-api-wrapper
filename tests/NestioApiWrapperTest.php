@@ -145,6 +145,7 @@ class NestioApiWrapperTest extends PHPUnit\Framework\TestCase
 		]);
 
 		$client->moveInDate('2019-06-01')
+				->group(1234)
 				->layout('studio')
 				->clientReferral('Ted McGinley')
 				->discoverySource('zillow')
