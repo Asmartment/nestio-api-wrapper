@@ -15,6 +15,7 @@ use PrimitiveSocial\NestioApiWrapper\Enums\Pets;
 use PrimitiveSocial\NestioApiWrapper\Enums\PropertyType;
 use PrimitiveSocial\NestioApiWrapper\Enums\Source;
 use PrimitiveSocial\NestioApiWrapper\Enums\SortBy;
+use PrimitiveSocial\NestioApiWrapper\NestioException;
 
 class Listings extends Nestio {
 
