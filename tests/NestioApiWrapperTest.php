@@ -1,11 +1,12 @@
 <?php
 
-if ( !isset( $_SESSION ) ) $_SESSION = array();
-
 use PrimitiveSocial\NestioApiWrapper\Nestio;
 use PrimitiveSocial\NestioApiWrapper\Listings;
 use PrimitiveSocial\NestioApiWrapper\Buildings;
 use PrimitiveSocial\NestioApiWrapper\Agents;
+use PrimitiveSocial\NestioApiWrapper\Neighborhoods;
+use PrimitiveSocial\NestioApiWrapper\Clients;
+use PrimitiveSocial\NestioApiWrapper\People;
 use PHPUnit\Framework\PHPUnit_Framework_TestCase;
 use PrimitiveSocial\NestioApiWrapper\NestioException;
 
@@ -19,8 +20,6 @@ class NestioApiWrapperTest extends PHPUnit\Framework\TestCase
 		$client = new Listings('036c088b94ab48b9b170d6b3dcd30341');
 
 		$output = $client->all();
-
-		$_SESSION['all_no_filters'] = $output;
 
 		$this->assertNotNull($output);
 
@@ -36,8 +35,6 @@ class NestioApiWrapperTest extends PHPUnit\Framework\TestCase
 		$client->commercialUse('industrial');
 
 		$output = $client->all();
-
-		$_SESSION['all_no_filters'] = $output;
 
 		$this->assertNotNull($output);
 
@@ -57,8 +54,6 @@ class NestioApiWrapperTest extends PHPUnit\Framework\TestCase
 		$this->assertNotNull($output);
 
 		$listingFromOutput = $output['items'][0];
-
-		$_SESSION['all_no_filters'] = $output;
 
 		$listing = $client->byId($listingFromOutput['id']);
 
@@ -105,6 +100,60 @@ class NestioApiWrapperTest extends PHPUnit\Framework\TestCase
 		$agent = $client->byId($agentFromInitial['id']);
 
 		$this->assertNotNull($agent);
+
+	}
+
+	public function testNestioCanGetNeighborhood() {
+
+		$output = null;
+
+		$client = new Neighborhoods('036c088b94ab48b9b170d6b3dcd30341');
+
+		$output = $client->all();
+
+		$this->assertNotNull($output);
+
+	}
+
+	public function testNestioCanGetNeighborhoodWithParams() {
+
+		$output = null;
+
+		$client = new Neighborhoods('036c088b94ab48b9b170d6b3dcd30341');
+
+		$output = $client->city('Philadelphia')
+						->state('PA')
+						->all();
+
+		$this->assertNotNull($output);
+
+	}
+
+	public function testNestioCanCreateClients() {
+
+		$output = null;
+
+		$client = new Clients('036c088b94ab48b9b170d6b3dcd30341');
+
+		// Create person
+		$client->person([
+			'first_name'	=> 'Gerbil',
+			'last_name'		=> 'McPherson',
+			'email'			=> 'nestio@example.com',
+			'phone_1'		=> '215-555-5555',
+			'is_primary'	=> true
+		]);
+
+		$client->moveInDate('2019-06-01')
+				->layout('studio')
+				->clientReferral('Ted McGinley')
+				->discoverySource('zillow')
+				->device('phone')
+				->sourceType('organic');
+
+		$output = $client->submit();
+
+		$this->assertNotNull($output);
 
 	}
  

@@ -137,13 +137,13 @@ class Listings extends Nestio {
 
 	public function listingType($data) {
 
-		$vars = ListingType::getConstants();
+		$vars = (new ListingType)->getConstants();
 
 		foreach ($vars as $key => $value) {
 
 			if($data == $value) {
 
-				$this->sendData['listing_type'] = ListingType::$key;
+				$this->sendData['listing_type'] = $vars[$key];
 
 			}
 
@@ -155,13 +155,13 @@ class Listings extends Nestio {
 
 	public function propertyType($data) {
 
-		$vars = PropertyType::getConstants();
+		$vars = (new PropertyType)->getConstants();
 
 		foreach ($vars as $key => $value) {
 
 			if($data == $value) {
 
-				$this->sendData['property_type'] = PropertyType::$key;
+				$this->sendData['property_type'] = $vars[$key];
 
 			}
 
@@ -175,7 +175,7 @@ class Listings extends Nestio {
 
 		if(!isset($this->sendData['commercial_use']) || !is_array($this->sendData['commercial_use'])) $this->sendData['commercial_use'] = array();
 
-		$vars = CommercialUse::getConstants();
+		$vars = (new CommercialUse)->getConstants();
 
 		foreach ($vars as $key => $value) {
 
@@ -183,7 +183,7 @@ class Listings extends Nestio {
 
 				if(in_array($value, $data)) {
 
-					$this->sendData['commercial_use'][] = CommercialUse::$key;
+					$this->sendData['commercial_use'][] = $vars[$key];
 
 				}
 
@@ -191,7 +191,7 @@ class Listings extends Nestio {
 
 				if($data == $value) {
 
-					$this->sendData['commercial_use'][] = CommercialUse::$key;
+					$this->sendData['commercial_use'][] = $vars[$key];
 
 				}
 
@@ -233,7 +233,7 @@ class Listings extends Nestio {
 
 		if(!isset($this->sendData['building_ownership']) || !is_array($this->sendData['building_ownership'])) $this->sendData['building_ownership'] = array();
 
-		$vars = BuildingOwnership::getConstants();
+		$vars = (new BuildingOwnership)->getConstants();
 
 		foreach ($vars as $key => $value) {
 
@@ -241,13 +241,13 @@ class Listings extends Nestio {
 
 				if(in_array($value, $data)) {
 
-					$this->sendData['commercial_use'][] = CommercialUse::$key;
+					$this->sendData['commercial_use'][] = $vars[$key];
 
 				}
 
 			} elseif($data == $value) {
 
-				$this->sendData['commercial_use'][] = CommercialUse::$key;
+				$this->sendData['commercial_use'][] = $vars[$key];
 
 			}
 
@@ -309,13 +309,13 @@ class Listings extends Nestio {
 
 	public function doorman($data) {
 
-		$vars = Doorman::getConstants();
+		$vars = (new Doorman)->getConstants();
 
 		foreach ($vars as $key => $value) {
 
 			if($data == $value) {
 
-				$this->sendData['doorman'] = Doorman::$key;
+				$this->sendData['doorman'] = $vars[$key];
 
 			}
 
@@ -329,7 +329,7 @@ class Listings extends Nestio {
 
 		if(!isset($this->sendData['pets']) || !is_array($this->sendData['pets'])) $this->sendData['pets'] = array();
 
-		$vars = Pets::getConstants();
+		$vars = (new Pets)->getConstants();
 
 		foreach ($vars as $key => $value) {
 
@@ -337,13 +337,13 @@ class Listings extends Nestio {
 
 				if(in_array($value, $data)) {
 
-					$this->sendData['pets'][] = Pets::$key;
+					$this->sendData['pets'][] = $vars[$key];
 
 				}
 
 			} elseif($data == $value) {
 
-				$this->sendData['pets'][] = Pets::$key;
+				$this->sendData['pets'][] = $vars[$key];
 
 			}
 
@@ -357,7 +357,7 @@ class Listings extends Nestio {
 
 		if(!isset($this->sendData['layout']) || !is_array($this->sendData['layout'])) $this->sendData['layout'] = array();
 
-		$vars = Layout::getConstants();
+		$vars = (new Layout)->getConstants();
 
 		foreach ($vars as $key => $value) {
 
@@ -365,13 +365,13 @@ class Listings extends Nestio {
 
 				if(in_array($value, $data)) {
 
-					$this->sendData['layout'][] = Layout::$key;
+					$this->sendData['layout'][] = $vars[$key];
 
 				}
 
 			} elseif($data == $value) {
 
-				$this->sendData['layout'][] = Layout::$key;
+				$this->sendData['layout'][] = $vars[$key];
 
 			}
 
@@ -383,13 +383,13 @@ class Listings extends Nestio {
 
 	public function bathrooms($data) {
 
-		$vars = Bathrooms::getConstants();
+		$vars = (new Bathrooms)->getConstants();
 
 		foreach ($vars as $key => $value) {
 
 			if($data == $value) {
 
-				$this->sendData['bathrooms'] = Bathrooms::$key;
+				$this->sendData['bathrooms'] = $vars[$key];
 
 			}
 
@@ -449,13 +449,13 @@ class Listings extends Nestio {
 
 	public function incentives($data) {
 
-		$vars = Incentives::getConstants();
+		$vars = (new Incentives)->getConstants();
 
 		foreach ($vars as $key => $value) {
 
 			if($data == $value) {
 
-				$this->sendData['incentives'] = Incentives::$key;
+				$this->sendData['incentives'] = $vars[$key];
 
 			}
 
@@ -489,13 +489,13 @@ class Listings extends Nestio {
 
 	public function source($data) {
 
-		$vars = Source::getConstants();
+		$vars = (new Source)->getConstants();
 
 		foreach ($vars as $key => $value) {
 
 			if($data == $value) {
 
-				$this->sendData['source'] = Source::$key;
+				$this->sendData['source'] = $vars[$key];
 
 			}
 
@@ -605,7 +605,7 @@ class Listings extends Nestio {
 
 		if(is_array($this->sendData['parking'])) $this->sendData['parking'] = array();
 
-		$vars = Parking::getConstants();
+		$vars = (new Parking)->getConstants();
 
 		foreach ($vars as $key => $value) {
 
@@ -613,13 +613,13 @@ class Listings extends Nestio {
 
 				if(in_array($value, $data)) {
 
-					$this->sendData['parking'][] = Parking::$key;
+					$this->sendData['parking'][] = $vars[$key];
 
 				}
 
 			} elseif($data == $value) {
 
-				$this->sendData['parking'][] = Parking::$key;
+				$this->sendData['parking'][] = $vars[$key];
 
 			}
 
@@ -639,13 +639,13 @@ class Listings extends Nestio {
 
 	public function sort($data, $dir = 'asc') {
 
-		$vars = SortBy::getConstants();
+		$vars = (new SortBy)->getConstants();
 
 		foreach ($vars as $key => $value) {
 
 			if($data == $value) {
 
-				$this->sendData['sort'] = SortBy::$key;
+				$this->sendData['sort'] = $vars[$key];
 				$this->sendData['sort_dir'] = $dir;
 
 			}

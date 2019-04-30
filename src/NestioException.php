@@ -12,9 +12,33 @@ class NestioException extends \Exception {
 
 	}
 
-	public function missingListingId() {
+	public static function missingListingId() {
 
 		return new self('Missing listing ID');
+
+	}
+
+	public static function clientMissingPerson() {
+
+		return new self('Client is missing person');
+
+	}
+
+	public static function clientMissingPersonFirstName() {
+
+		return new self('Client is missing person\'s first name');
+
+	}
+
+	public static function clientMissingPersonLastName() {
+
+		return new self('Client is missing person\'s last name');
+
+	}
+
+	public static function clientMissingGroup() {
+
+		return new self('Client is missing group');
 
 	}
 

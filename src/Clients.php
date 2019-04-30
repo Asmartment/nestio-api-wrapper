@@ -13,7 +13,7 @@ use PrimitiveSocial\NestioApiWrapper\Enums\SourceType;
 
 class Clients extends Nestio {
 
-	protected $people = array();
+	public $people = array();
 
 	public function __construct($apiKey = null, $version = 2) {
 
@@ -28,12 +28,40 @@ class Clients extends Nestio {
 
 		$this->uri = 'clients';
 
+		// Check for errors
+		if(empty($this->people)) {
+
+			throw NestioException::clientMissingPerson();
+
+
+		}
+
+		if(!isset($this->sendData['group'])) {
+
+			throw NestioException::clientMissingGroup();
+
+		}
+
 		// Parse people
 		$this->sendData['people'] = array();
 
 		foreach ($this->people as $p) {
 
-			$this->sendData['people'][] = $p->output();
+			$person = $p->getData();
+
+			if(!isset($person['first_name'])) {
+
+				throw NestioException::clientMissingPersonFirstName();
+
+			}
+
+			if(!isset($person['last_name'])) {
+
+				throw NestioException::clientMissingPersonLastName();
+
+			}
+
+			$this->sendData['people'][] = $p->getData();
 
 		}
 
@@ -43,16 +71,64 @@ class Clients extends Nestio {
 
 	}
 
+	public function send() {
+
+		$sendData = array_merge(
+			array(
+				'key' => $this->apiKey
+			),
+			array(
+				'client' => $this->sendData
+			)
+		);
+
+		try {
+
+			$response = $this->client->request(
+				$this->callMethod,
+				$this->uri,
+				array(
+					'json' => $sendData,
+					'auth' => array(
+						$this->apiKey,
+						null
+					)
+				)
+			);
+
+		} catch (GuzzleHttp\Exception\ClientException $e) {
+
+			throw NestioException::guzzleError($e->getResponse()->getBody()->getContents(), $this->getBody(), $this->sendData, $this->url . $this->primaryUri . $this->uri);
+
+		} catch (\Exception $e) {
+
+			throw NestioException::guzzleError($e->getResponse()->getBody()->getContents(), $this->getBody(), $this->sendData, $this->url . $this->primaryUri . $this->uri);
+
+		} catch (\ErrorException $e) {
+
+			throw NestioException::guzzleError($e->getResponse()->getBody()->getContents(), $this->getBody(), $this->sendData, $this->url . $this->primaryUri . $this->uri);
+
+		}
+
+		$this->output = json_decode($response->getBody(), TRUE);
+
+		return $this;
+	}
+
 	// Setters
 	public function person($data) {
 
 		$person = new People();
 
 		foreach ($data as $key => $value) {
-			$person->{$key} = $value;
+
+			$person->{$key}($value);
+
 		}
 
 		$this->people[] = $person;
+
+		return $this;
 
 	}
 
@@ -68,7 +144,7 @@ class Clients extends Nestio {
 
 		if(!isset($this->sendData['layout']) || !is_array($this->sendData['layout'])) $this->sendData['layout'] = array();
 
-		$vars = Layout::getConstants();
+		$vars = (new Layout)->getConstants();
 
 		foreach ($vars as $key => $value) {
 
@@ -76,13 +152,13 @@ class Clients extends Nestio {
 
 				if(in_array($value, $data)) {
 
-					$this->sendData['layout'][] = Layout::$key;
+					$this->sendData['layout'][] = $vars[$key];
 
 				}
 
 			} elseif($data == $value) {
 
-				$this->sendData['layout'][] = Layout::$key;
+				$this->sendData['layout'][] = $vars[$key];
 
 			}
 
@@ -124,7 +200,7 @@ class Clients extends Nestio {
 
 	}
 
-	public function broker_company($data) {
+	public function brokerCompany($data) {
 
 		$this->sendData['broker_company'] = $data;
 
@@ -132,7 +208,7 @@ class Clients extends Nestio {
 
 	}
 
-	public function broker_email($data) {
+	public function brokerEmail($data) {
 
 		$this->sendData['broker_email'] = $data;
 
@@ -140,7 +216,7 @@ class Clients extends Nestio {
 
 	}
 
-	public function broker_first_name($data) {
+	public function brokerFirstName($data) {
 
 		$this->sendData['broker_first_name'] = $data;
 
@@ -148,7 +224,7 @@ class Clients extends Nestio {
 
 	}
 
-	public function broker_last_name($data) {
+	public function brokerLastName($data) {
 
 		$this->sendData['broker_last_name'] = $data;
 
@@ -156,7 +232,7 @@ class Clients extends Nestio {
 
 	}
 
-	public function broker_phone($data) {
+	public function brokerPhone($data) {
 
 		$this->sendData['broker_phone'] = $data;
 
@@ -164,7 +240,7 @@ class Clients extends Nestio {
 
 	}
 
-	public function client_referral($data) {
+	public function clientReferral($data) {
 
 		$this->sendData['client_referral'] = $data;
 
@@ -172,7 +248,7 @@ class Clients extends Nestio {
 
 	}
 
-	public function campaign_info($data) {
+	public function campaignInfo($data) {
 
 		$this->sendData['campaign_info'] = $data;
 
@@ -192,7 +268,7 @@ class Clients extends Nestio {
 
 		if(!isset($this->sendData['discovery_source']) || !is_array($this->sendData['discovery_source'])) $this->sendData['discovery_source'] = array();
 
-		$vars = DiscoverySource::getConstants();
+		$vars = (new DiscoverySource)->getConstants();
 
 		foreach ($vars as $key => $value) {
 
@@ -200,7 +276,7 @@ class Clients extends Nestio {
 
 				if(in_array($value, $data)) {
 
-					$this->sendData['discovery_source'][] = DiscoverySource::$key;
+					$this->sendData['discovery_source'][] = $vars[$key];
 
 				}
 
@@ -208,7 +284,7 @@ class Clients extends Nestio {
 
 				if($data == $value) {
 
-					$this->sendData['discovery_source'][] = DiscoverySource::$key;
+					$this->sendData['discovery_source'][] = $vars[$key];
 
 				}
 
@@ -224,7 +300,7 @@ class Clients extends Nestio {
 
 		if(!isset($this->sendData['lead_source']) || !is_array($this->sendData['lead_source'])) $this->sendData['lead_source'] = array();
 
-		$vars = LeadSource::getConstants();
+		$vars = (new LeadSource)->getConstants();
 
 		foreach ($vars as $key => $value) {
 
@@ -232,7 +308,7 @@ class Clients extends Nestio {
 
 				if(in_array($value, $data)) {
 
-					$this->sendData['lead_source'][] = LeadSource::$key;
+					$this->sendData['lead_source'][] = $vars[$key];
 
 				}
 
@@ -240,7 +316,7 @@ class Clients extends Nestio {
 
 				if($data == $value) {
 
-					$this->sendData['lead_source'][] = LeadSource::$key;
+					$this->sendData['lead_source'][] = $vars[$key];
 
 				}
 
@@ -256,7 +332,7 @@ class Clients extends Nestio {
 
 		if(!isset($this->sendData['device']) || !is_array($this->sendData['device'])) $this->sendData['device'] = array();
 
-		$vars = Device::getConstants();
+		$vars = (new Device)->getConstants();
 
 		foreach ($vars as $key => $value) {
 
@@ -264,7 +340,7 @@ class Clients extends Nestio {
 
 				if(in_array($value, $data)) {
 
-					$this->sendData['device'][] = Device::$key;
+					$this->sendData['device'][] = $vars[$key];
 
 				}
 
@@ -272,7 +348,7 @@ class Clients extends Nestio {
 
 				if($data == $value) {
 
-					$this->sendData['device'][] = Device::$key;
+					$this->sendData['device'][] = $vars[$key];
 
 				}
 
@@ -288,7 +364,7 @@ class Clients extends Nestio {
 
 		if(!isset($this->sendData['source_type']) || !is_array($this->sendData['source_type'])) $this->sendData['source_type'] = array();
 
-		$vars = SourceType::getConstants();
+		$vars = (new SourceType)->getConstants();
 
 		foreach ($vars as $key => $value) {
 
@@ -296,7 +372,7 @@ class Clients extends Nestio {
 
 				if(in_array($value, $data)) {
 
-					$this->sendData['source_type'][] = SourceType::$key;
+					$this->sendData['source_type'][] = $vars[$key];
 
 				}
 
@@ -304,7 +380,7 @@ class Clients extends Nestio {
 
 				if($data == $value) {
 
-					$this->sendData['source_type'][] = SourceType::$key;
+					$this->sendData['source_type'][] = $vars[$key];
 
 				}
 
