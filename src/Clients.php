@@ -42,6 +42,17 @@ class Clients extends Nestio {
 
 		}
 
+		// Fix arrays
+		$data = $this->sendData;
+
+		foreach ($data as $key => $value) {
+			if($key !== 'layout' && is_array($data[$key])) {
+				$data[$key] = implode('|', $value);
+			}
+		}
+
+		$this->sendData = $data;
+
 		// Parse people
 		$this->sendData['people'] = array();
 

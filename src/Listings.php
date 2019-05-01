@@ -253,6 +253,8 @@ class Listings extends Nestio {
 
 		}
 
+		$this->sendData['commercial_use'] = implode('|', $this->sendData['commercial_use']);
+
 		return $this;
 
 	}
@@ -349,6 +351,8 @@ class Listings extends Nestio {
 
 		}
 
+		$this->sendData['pets'] = implode('|', $this->sendData['pets']);
+
 		return $this;
 
 	}
@@ -376,6 +380,8 @@ class Listings extends Nestio {
 			}
 
 		}
+
+		$this->sendData['layout'] = implode('|', $this->sendData['layout']);
 
 		return $this;
 
@@ -624,6 +630,8 @@ class Listings extends Nestio {
 			}
 
 		}
+
+		$this->sendData['parking'] = implode('|', $this->sendData['parking']);
 
 		return $this;
 
