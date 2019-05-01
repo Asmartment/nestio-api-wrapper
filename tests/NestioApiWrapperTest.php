@@ -17,7 +17,7 @@ class NestioApiWrapperTest extends PHPUnit\Framework\TestCase
 
 		$output = null;
 
-		$client = new Listings('036c088b94ab48b9b170d6b3dcd30341');
+		$client = new Listings('APIKEY');
 
 		$output = $client->all();
 
@@ -29,7 +29,7 @@ class NestioApiWrapperTest extends PHPUnit\Framework\TestCase
 
 		$output = null;
 
-		$client = new Listings('036c088b94ab48b9b170d6b3dcd30341');
+		$client = new Listings('APIKEY');
 
 		// Adding filters
 		$client->commercialUse('industrial');
@@ -44,7 +44,7 @@ class NestioApiWrapperTest extends PHPUnit\Framework\TestCase
 
 		$output = null;
 
-		$client = new Listings('036c088b94ab48b9b170d6b3dcd30341');
+		$client = new Listings('APIKEY');
 
 		// Adding filters
 		$client->commercialUse('industrial');
@@ -65,7 +65,7 @@ class NestioApiWrapperTest extends PHPUnit\Framework\TestCase
 
 		$output = null;
 
-		$client = new Buildings('036c088b94ab48b9b170d6b3dcd30341');
+		$client = new Buildings('APIKEY');
 
 		$output = $client->all();
 
@@ -77,7 +77,7 @@ class NestioApiWrapperTest extends PHPUnit\Framework\TestCase
 
 		$output = null;
 
-		$client = new Agents('036c088b94ab48b9b170d6b3dcd30341');
+		$client = new Agents('APIKEY');
 
 		$output = $client->all();
 
@@ -89,7 +89,7 @@ class NestioApiWrapperTest extends PHPUnit\Framework\TestCase
 
 		$output = null;
 
-		$client = new Agents('036c088b94ab48b9b170d6b3dcd30341');
+		$client = new Agents('APIKEY');
 
 		$output = $client->all();
 
@@ -107,7 +107,7 @@ class NestioApiWrapperTest extends PHPUnit\Framework\TestCase
 
 		$output = null;
 
-		$client = new Neighborhoods('036c088b94ab48b9b170d6b3dcd30341');
+		$client = new Neighborhoods('APIKEY');
 
 		$output = $client->all();
 
@@ -119,7 +119,7 @@ class NestioApiWrapperTest extends PHPUnit\Framework\TestCase
 
 		$output = null;
 
-		$client = new Neighborhoods('036c088b94ab48b9b170d6b3dcd30341');
+		$client = new Neighborhoods('APIKEY');
 
 		$output = $client->city('Philadelphia')
 						->state('PA')
@@ -133,7 +133,7 @@ class NestioApiWrapperTest extends PHPUnit\Framework\TestCase
 
 		$output = null;
 
-		$client = new Clients('036c088b94ab48b9b170d6b3dcd30341');
+		$client = new Clients('APIKEY');
 
 		// Create person
 		$client->person([
