@@ -13,11 +13,13 @@ use PrimitiveSocial\NestioApiWrapper\NestioException;
 class NestioApiWrapperTest extends PHPUnit\Framework\TestCase
 {
 
+	public const APIKEY = "";
+
 	public function testNestioCanGetAllListings() {
 
 		$output = null;
 
-		$client = new Listings('APIKEY');
+		$client = new Listings(self::APIKEY);
 
 		$output = $client->all();
 
@@ -29,7 +31,7 @@ class NestioApiWrapperTest extends PHPUnit\Framework\TestCase
 
 		$output = null;
 
-		$client = new Listings('APIKEY');
+		$client = new Listings(self::APIKEY);
 
 		// Adding filters
 		$client->commercialUse('industrial');
@@ -44,7 +46,7 @@ class NestioApiWrapperTest extends PHPUnit\Framework\TestCase
 
 		$output = null;
 
-		$client = new Listings('APIKEY');
+		$client = new Listings(self::APIKEY);
 
 		// Adding filters
 		$client->commercialUse('industrial');
@@ -65,7 +67,7 @@ class NestioApiWrapperTest extends PHPUnit\Framework\TestCase
 
 		$output = null;
 
-		$client = new Buildings('APIKEY');
+		$client = new Buildings(self::APIKEY);
 
 		$output = $client->all();
 
@@ -77,7 +79,7 @@ class NestioApiWrapperTest extends PHPUnit\Framework\TestCase
 
 		$output = null;
 
-		$client = new Agents('APIKEY');
+		$client = new Agents(self::APIKEY);
 
 		$output = $client->all();
 
@@ -89,7 +91,7 @@ class NestioApiWrapperTest extends PHPUnit\Framework\TestCase
 
 		$output = null;
 
-		$client = new Agents('APIKEY');
+		$client = new Agents(self::APIKEY);
 
 		$output = $client->all();
 
@@ -107,7 +109,7 @@ class NestioApiWrapperTest extends PHPUnit\Framework\TestCase
 
 		$output = null;
 
-		$client = new Neighborhoods('APIKEY');
+		$client = new Neighborhoods(self::APIKEY);
 
 		$output = $client->all();
 
@@ -119,7 +121,7 @@ class NestioApiWrapperTest extends PHPUnit\Framework\TestCase
 
 		$output = null;
 
-		$client = new Neighborhoods('APIKEY');
+		$client = new Neighborhoods(self::APIKEY);
 
 		$output = $client->city('Philadelphia')
 						->state('PA')
@@ -133,7 +135,7 @@ class NestioApiWrapperTest extends PHPUnit\Framework\TestCase
 
 		$output = null;
 
-		$client = new Clients('APIKEY');
+		$client = new Clients(self::APIKEY);
 
 		// Create person
 		$client->person([
