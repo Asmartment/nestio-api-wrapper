@@ -15,6 +15,8 @@ class NestioApiWrapperTest extends PHPUnit\Framework\TestCase
 
 	public const APIKEY = "";
 
+	public const GROUPID = "1234";
+
 	public function testNestioCanGetAllListings() {
 
 		$output = null;
@@ -147,7 +149,7 @@ class NestioApiWrapperTest extends PHPUnit\Framework\TestCase
 		]);
 
 		$client->moveInDate('2019-06-01')
-				->group('1234')
+				->group(self::GROUPID)
 				->layout('1br')
 				->clientReferral('Ted McGinley')
 				->discoverySource('zillow')
@@ -157,6 +159,50 @@ class NestioApiWrapperTest extends PHPUnit\Framework\TestCase
 		$output = $client->submit();
 
 		$this->assertNotNull($output);
+
+	}
+
+	public function testNestioCanUpdateClientStatus() {
+
+		$output = null;
+
+		$client = new Clients(self::APIKEY);
+
+		// Create person
+		$client->person([
+			'first_name'	=> 'Gerbil',
+			'last_name'		=> 'McPherson',
+			'email'			=> 'nestio@example.com',
+			'phone_1'		=> '215-555-5555',
+			'is_primary'	=> true
+		]);
+
+		$client->moveInDate('2019-06-01')
+				->group(self::GROUPID)
+				->layout('1br')
+				->clientReferral('Ted McGinley')
+				->discoverySource('zillow')
+				->device('phone')
+				->sourceType('organic');
+
+		$output = $client->submit();
+
+		$this->assertNotNull($output);
+
+		// Now we should change their status
+		$newClientRequest = new Clients(self::APIKEY);
+
+		$newOutput = $newClientRequest->id($output['data']['client']['id'])
+						->status('toured')
+						->update();
+
+		$this->assertEquals('Toured', $newOutput['data']['client']['status']);
+
+		$newOutput = $newClientRequest->id($output['data']['client']['id'])
+						->status('applicant')
+						->update();
+
+		$this->assertEquals('Applicant', $newOutput['data']['client']['status']);
 
 	}
  

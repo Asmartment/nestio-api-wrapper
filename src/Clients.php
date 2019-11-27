@@ -5,6 +5,7 @@ namespace PrimitiveSocial\NestioApiWrapper;
 use PrimitiveSocial\NestioApiWrapper\Nestio;
 use PrimitiveSocial\NestioApiWrapper\NestioException;
 use PrimitiveSocial\NestioApiWrapper\People;
+use PrimitiveSocial\NestioApiWrapper\Enums\ClientStatus;
 use PrimitiveSocial\NestioApiWrapper\Enums\Layout;
 use PrimitiveSocial\NestioApiWrapper\Enums\DiscoverySource;
 use PrimitiveSocial\NestioApiWrapper\Enums\LeadSource;
@@ -82,6 +83,31 @@ class Clients extends Nestio {
 
 	}
 
+	public function update() {
+
+		// Check for errors
+		if(!isset($this->sendData['nestio_client_id']) || empty($this->sendData['nestio_client_id'])) {
+
+			throw NestioException::missingClientId();
+
+		}
+
+		if(!isset($this->sendData['nestio_client_id']) || empty($this->sendData['nestio_client_id'])) {
+
+			throw NestioException::clientMissingStatus();
+
+		}
+
+		$this->callMethod = 'PUT';
+
+		$this->uri = "clients/{$this->sendData['nestio_client_id']}";
+
+		$this->send();
+
+		return $this->output();
+
+	}
+
 	public function send() {
 
 		$sendData = array_merge(
@@ -143,6 +169,14 @@ class Clients extends Nestio {
 
 	}
 
+	public function id($id) {
+
+		$this->sendData['nestio_client_id'] = $id;
+
+		return $this;
+
+	}
+
 	public function moveInDate($date) {
 
 		$this->sendData['move_in_date'] = $date;
@@ -170,6 +204,34 @@ class Clients extends Nestio {
 			} elseif($data == $value) {
 
 				$this->sendData['layout'][] = $vars[$key];
+
+			}
+
+		}
+
+		return $this;
+
+	}
+
+	public function status($data) {
+
+		if(!isset($this->sendData['status']) || !is_array($this->sendData['status'])) $this->sendData['status'] = array();
+
+		$vars = (new ClientStatus)->getConstants();
+
+		foreach ($vars as $key => $value) {
+
+			if(is_array($data)) {
+
+				if(in_array($value, $data)) {
+
+					$this->sendData['status'] = $vars[$key];
+
+				}
+
+			} elseif($data == $value) {
+
+				$this->sendData['status'] = $vars[$key];
 
 			}
 
