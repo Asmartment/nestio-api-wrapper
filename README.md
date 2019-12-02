@@ -214,7 +214,7 @@ To use the Clients object, include `use PrimitiveSocial\NestioApiWrapper\Clients
 Nestio API Link :[https://developers.nestio.com/api/v2/clients.html](https://developers.nestio.com/api/v2/clients.html)
 
 ```
-client = new Clients('APIKEY');
+$client = new Clients('APIKEY');
 
         // Create persons
         $client->person([
@@ -270,6 +270,23 @@ You can add as many `person`s as needed. Each `person` function call creates a n
 - leadSource
 - device
 - sourceType
+
+#### Client Status
+You can also update the client status by using the Nestio Client ID and the status:
+```
+$client = new Clients('APIKEY');
+
+$output = $client->id($nestioClientId)
+                ->status($status)
+                ->update();
+```
+
+Statuses can be set to:
+- lead
+- toured
+- applicant
+- resident
+- not-a-prospect
 
 ## Contributing
 
@@ -346,7 +363,7 @@ further defined and clarified by project maintainers.
 #### Enforcement
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may be
-reported by contacting the project team at [INSERT EMAIL ADDRESS]. All
+reported by contacting the project team at HELLO@PRIMITIVESOCIAL.COM. All
 complaints will be reviewed and investigated and will result in a response that
 is deemed necessary and appropriate to the circumstances. The project team is
 obligated to maintain confidentiality with regard to the reporter of an incident.

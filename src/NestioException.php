@@ -42,6 +42,18 @@ class NestioException extends \Exception {
 
 	}
 
+	public static function missingClientId() {
+
+		return new self('Client is missing Nestio Client Id');
+
+	}
+
+	public static function clientMissingStatus() {
+
+		return new self('Client is missing status for status update request');
+
+	}
+
 	public static function guzzleError($error, $request, $body, $url) {
 
 		return new self(
