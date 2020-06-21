@@ -465,4 +465,52 @@ class Clients extends Nestio {
 
 	}
 
+    public function unitId($data) {
+
+        $this->sendData['application']['unit_id'] = $data;
+
+        return $this;
+
+    }
+
+    public function leaseStartDate($date) {
+
+        $this->sendData['application']['lease_start_date'] = $date;
+
+        return $this;
+
+    }
+
+    public function leaseEndDate($date) {
+
+        $this->sendData['application']['lease_end_date'] = $date;
+
+        return $this;
+
+    }
+
+    public function applicationSubmittedDate($date) {
+
+        $this->sendData['application']['application_submitted_date'] = $date;
+
+        return $this;
+
+    }
+
+    public function applicationPrice($price) {
+
+        $this->sendData['application']['application_price'] = $price;
+
+        return $this;
+
+    }
+
+    public function closedDate($date) {
+
+        $this->sendData['application']['closed_date'] = $date;
+
+        return $this;
+
+    }
+
 }
