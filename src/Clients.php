@@ -139,7 +139,7 @@ class Clients extends Nestio {
 
 		} catch (\Exception $e) {
 
-			throw NestioException::guzzleError($e->getResponse()->getBody()->getContents(), $this->getBody(), $this->sendData, $this->url . $this->primaryUri . $this->uri);
+            throw NestioException::error($e->getResponse()->getBody()->getContents());
 
 		} catch (\ErrorException $e) {
 

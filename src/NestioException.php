@@ -65,4 +65,12 @@ class NestioException extends \Exception {
 
 	}
 
+    public static function error($error) {
+
+        return new self(
+            $error . PHP_EOL
+        );
+
+    }
+
 }
