@@ -672,4 +672,12 @@ class Listings extends Nestio {
 
 	}
 
+    public function property($data) {
+
+        $this->sendData['property'] = $data;
+
+        return $this;
+
+    }
+
 }
