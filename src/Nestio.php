@@ -5,7 +5,6 @@ namespace PrimitiveSocial\NestioApiWrapper;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
-use Carbon\Carbon;
 use PrimitiveSocial\NestioApiWrapper\NestioException;
 
 class Nestio {
@@ -97,7 +96,7 @@ class Nestio {
 				'container' => $this->container[0],
 				'body' => $this->getBody(),
 				'sendData' => $this->sendData,
-				'uri' => $this->versionUri . $this->uri
+				'uri' => $this->primaryUri . $this->uri
 			)
 		);
 
@@ -157,7 +156,7 @@ class Nestio {
 				)
 			);
 
-		} catch (GuzzleHttp\Exception\ClientException $e) {
+		} catch (\GuzzleHttp\Exception\ClientException $e) {
 
 			throw NestioException::guzzleError($e->getMessage(), $this->getBody(), $this->sendData, $this->url . $this->primaryUri . $this->uri);
 
